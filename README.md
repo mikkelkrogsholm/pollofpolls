@@ -11,6 +11,12 @@ Please do so by raising issues here on github and / or by creating new functions
 
 In the code of each function I have tried to document my choices as good as possible. Please raise an issue if you feel something is wrong or missing.
 
+The method used is based on these two articles:
+
+<https://greenbookblog.org/2018/01/16/the-prediction-how-nate-silver-does-it/>
+
+<https://fivethirtyeight.com/features/the-polls-are-all-right/>
+
 Installation
 ------------
 
