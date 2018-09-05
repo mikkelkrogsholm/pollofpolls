@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 The goal of pollofpolls is to make it easy to make a poll of polls.
 
 This package is open sourced and all contributions are welcome. I have made
-some methological choices in this implementation that you are more than welcome
+some methodological choices in this implementation that you are more than welcome
 to challenge. 
 
 Please do so by raising issues here on github and / or by creating new functions
@@ -26,7 +26,7 @@ and doing a pull request.
 In the code of each function I have tried to document my choices as good as possible.
 Please raise an issue if you feel something is wrong or missing.
 
-The method used is based on these two articles:
+The methodology used is based on these two articles:
 
 https://greenbookblog.org/2018/01/16/the-prediction-how-nate-silver-does-it/
 
