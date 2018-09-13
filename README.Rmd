@@ -26,11 +26,26 @@ and doing a pull request.
 In the code of each function I have tried to document my choices as good as possible.
 Please raise an issue if you feel something is wrong or missing.
 
+### Several poll of polls methods
+
+There are now two methods available for calculating poll of polls:
+
+#### The FiveThirtyEight Way
+
 The methodology used is based on these two articles:
 
 https://greenbookblog.org/2018/01/16/the-prediction-how-nate-silver-does-it/
 
 https://fivethirtyeight.com/features/the-polls-are-all-right/
+
+This is the way used in example one and two
+
+#### The Altinget Way 
+
+The methodology there is based on hear say. It is pretty intuitive - read the 
+documentation for the function: pp_poll_of_poll_summariser()
+
+This is the way used in example three.
 
 ## Installation
 
@@ -46,7 +61,6 @@ devtools::install_github("mikkelkrogsholm/pollofpolls")
 This is hands free driverless poll of polls calculation. 
 
 ```{r driverless}
-
 library(pollofpolls)
 
 pollofpoll <- suppressMessages(pp_auto_poll_of_poll()) 
@@ -86,4 +100,57 @@ final_poll[, 1:2] <- purrr::map(final_poll[, 1:2], round, 2)
 
 # Make a better looking table
 knitr::kable(final_poll)
+```
+
+## Example three:  Poll of Polls by summarisation
+
+This is the way I hear they do it at altinget.
+
+```{r altinget}
+library(pollofpolls)
+
+polls <- pp_get_raw_polls()
+
+my_pp <- pp_poll_of_poll_summariser(polls)
+
+# Round the digits so it looks pretty
+my_pp[, 1:2] <- purrr::map(my_pp[, 1:2], round, 2)
+
+# Make a better looking table
+knitr::kable(my_pp)
+```
+
+
+### Comparing methods
+
+The two methods are very alike when it comes to predicting the results
+
+```{r compare_1}
+library(tidyverse)
+
+plotdata <- inner_join(pollofpoll, my_pp, by = "party")
+
+ggplot(plotdata) + 
+  geom_point(aes(pred.x, pred.y)) + 
+  theme_minimal() + 
+  labs(y = "Altinget",
+       x = "FiveThirtyEight") + 
+  expand_limits(x = c(0, max(plotdata$pred.y)), 
+                y = c(0, max(plotdata$pred.x))) +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "gray") +
+  coord_equal()
+```
+
+... but very different when it comes to estimating the error. One uses a formula based error and the other a more empirically derived one. And it shows.
+
+```{r compare_2}
+ggplot(plotdata) + 
+  geom_point(aes(error.x, error.y)) + 
+  theme_minimal() + 
+  labs(y = "Altinget",
+       x = "FiveThirtyEight") + 
+  expand_limits(x = c(0, max(plotdata$error.y)), 
+                y = c(0, max(plotdata$error.x))) +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "gray") +
+  coord_equal()
 ```
