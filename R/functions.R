@@ -1,35 +1,3 @@
-#' Download raw polls
-#'
-#' Downloads raw polls from Erik Gahners github repo. Downloads all but only
-#' save the latest xx days as set by the day parameter
-#'
-#' @param days keeps only polls that are equal to or younger than the days
-#'     parameter.
-#'
-#' @return tibble
-#'
-#' @export
-#' @importFrom magrittr %>%
-pp_get_raw_polls <- function(days = 28){
-
-  # We get the data from Erik Gahners repository on danish polls
-  url <- "https://raw.githubusercontent.com/erikgahner/polls/master/polls.csv"
-  g <-  suppressMessages(readr::read_csv(url))
-
-  # Then I transform the data into a form that I find easier to work with
-  p <- g %>%
-    dplyr::select(id:n) %>%
-    tidyr::gather(party, percent, -c(id, pollingfirm, year, month, day, n)) %>%
-    dplyr::mutate(party = stringr::str_remove_all(party, "party_"),
-           datetime = paste(year, month, day) %>% lubridate::ymd()) %>%
-    dplyr::select(id, pollingfirm, datetime, n, party, percent) %>%
-    dplyr::filter(datetime >= (max(datetime) - days))
-
-  # return the data
-  return(p)
-
-}
-
 #' Checks and recalculates the polls
 #'
 #' Checks the polls and recalculates them if they do not sum to 100.

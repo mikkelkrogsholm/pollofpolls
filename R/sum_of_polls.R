@@ -19,8 +19,8 @@
 #'
 #' @examples
 #' polls <- pp_get_raw_polls()
-#' pp_poll_of_poll_summariser(polls)
-pp_poll_of_poll_summariser <- function(polls, collapse_firm = TRUE){
+#' pp_poll_of_polls_summariser(polls)
+pp_poll_of_polls_summariser <- function(polls, collapse_firm = TRUE){
 
   pp <- polls %>%
     dplyr::select(id, pollingfirm, n, party, percent) %>%
